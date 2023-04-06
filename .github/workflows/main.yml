@@ -3,8 +3,7 @@ name: Create UserScript
 on:
   workflow_dispatch:
   push:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
   create-script:
@@ -39,23 +38,22 @@ jobs:
           cat style.css >> mastodon-bird-ui.user.js
           echo "');" >> mastodon-bird-ui.user.js
 
-      - name: Create release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: Automatic script generation
-          draft: false
-          prerelease: false
+      - name: Generate tag name
+        run: echo "TAG_NAME=$VERSION" >> $GITHUB_ENV
 
-      - name: Upload script
-        uses: actions/upload-release-asset@v1
+      - name: Release scripts
+        uses: softprops/action-gh-release@v1
+        with:
+          files: mastodon-bird-ui.user.js
+          name: Automatic script generation
+          tag_name: ${{ env.TAG_NAME }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Delete older releases
+        uses: dev-drprasad/delete-older-releases@v0.2.0
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./mastodon-bird-ui.user.js
-          asset_name: mastodon-bird-ui.user.js
-          asset_content_type: application/javascript
+          keep_latest: 1
+          delete_tags: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
