@@ -39,7 +39,9 @@ jobs:
           echo "');" >> mastodon-bird-ui.user.js
 
       - name: Generate tag name
-        run: echo "TAG_NAME=$VERSION" >> $GITHUB_ENV
+        run: |  
+         VERSION=${{ steps.extract_version.outputs.version }}
+         echo "TAG_NAME=$VERSION" >> $GITHUB_ENV
 
       - name: Release scripts
         uses: softprops/action-gh-release@v1
