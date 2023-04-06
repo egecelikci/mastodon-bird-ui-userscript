@@ -35,9 +35,9 @@ jobs:
           // @downloadURL https://github.com/egecelikci/mastodon-bird-ui-userscript/releases/latest/download/mastodon-bird-ui.user.js
           // ==/UserScript==
           " > mastodon-bird-ui.user.js
-          echo "GM_addStyle(`" >> mastodon-bird-ui.user.js
+          echo "GM_addStyle(\`" >> mastodon-bird-ui.user.js
           cat style.css >> mastodon-bird-ui.user.js
-          echo "`);" >> mastodon-bird-ui.user.js
+          echo "\`);" >> mastodon-bird-ui.user.js
 
       - name: Generate tag name
         run: |  
