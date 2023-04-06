@@ -26,13 +26,14 @@ jobs:
         run: |
           VERSION=${{ steps.extract_version.outputs.version }}
           echo "// ==UserScript==
-          // @name        Mastodon Bird UI
-          // @match       https://ieji.de/*
-          // @grant       GM_addStyle
-          // @version     $VERSION
-          // @author      egecelikci
-          // @description A UserScript that applies the Mastodon Bird UI style to ieji.de
-          // @downloadURL https://github.com/egecelikci/mastodon-bird-ui-userscript/releases/latest/download/mastodon-bird-ui.user.js
+          // @name         Mastodon Bird UI
+          // @match        https://ieji.de/*
+          // @grant        GM_addStyle
+          // @version      $VERSION
+          // @author       egecelikci
+          // @description  A UserScript that applies the Mastodon Bird UI style to ieji.de
+          // @downloadURL  https://github.com/egecelikci/mastodon-bird-ui-userscript/releases/latest/download/mastodon-bird-ui.user.js
+          // @updateURL    https://github.com/egecelikci/mastodon-bird-ui-userscript/releases/latest/download/mastodon-bird-ui.user.js
           // ==/UserScript==
           " > mastodon-bird-ui.user.js
           echo "GM_addStyle(\`" >> mastodon-bird-ui.user.js
