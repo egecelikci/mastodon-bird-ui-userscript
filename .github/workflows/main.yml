@@ -1,0 +1,61 @@
+name: Create UserScript
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  create-script:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Get style.css
+        run: |
+          curl https://raw.githubusercontent.com/ronilaukkarinen/mastodon-bird-ui/master/style.css > style.css
+
+      - name: Extract version number
+        id: extract_version
+        run: |
+          VERSION=$(head -n 2 style.css | grep -o '[0-9]\+\.[0-9]\+\.[0-9]\+')
+          echo "::set-output name=version::$VERSION"
+
+      - name: Create UserScript
+        run: |
+          VERSION=${{ steps.extract_version.outputs.version }}
+          echo "// ==UserScript==
+          // @name     Mastodon Bird UI
+          // @grant    GM_addStyle
+          // @version  $VERSION
+          // @author   egecelikci
+          // @match    https://ieji.de/*
+          // @description A UserScript that applies the Mastodon Bird UI style to ieji.de
+          // @downloadURL https://github.com/egecelikci/mastodon-bird-ui/releases/latest/download/mastodon-bird-ui.user.js
+          // ==/UserScript==" > mastodon-bird-ui.user.js
+          echo "GM_addStyle('" >> mastodon-bird-ui.user.js
+          cat style.css >> mastodon-bird-ui.user.js
+          echo "');" >> mastodon-bird-ui.user.js
+
+      - name: Create release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Automatic script generation
+          draft: false
+          prerelease: false
+
+      - name: Upload script
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./mastodon-bird-ui.user.js
+          asset_name: mastodon-bird-ui.user.js
+          asset_content_type: application/javascript
