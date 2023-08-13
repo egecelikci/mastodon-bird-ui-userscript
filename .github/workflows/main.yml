@@ -12,9 +12,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Get style.css
+      - name: Get layout-single-column.css
         run: |
-          curl https://raw.githubusercontent.com/ronilaukkarinen/mastodon-bird-ui/master/style.css > style.css
+          curl https://github.com/ronilaukkarinen/mastodon-bird-ui/raw/main/layout-single-column.css > layout-single-column.css
+
+      - name: Get layout-multiple-columns.css
+        run: |
+          curl https://github.com/ronilaukkarinen/mastodon-bird-ui/raw/main/layout-multiple-columns.css > layout-multiple-columns.css
 
       - name: Generate tag name
         run: echo "TAG_NAME=$(date +%F-%H-%M)" >> $GITHUB_ENV
@@ -23,17 +27,19 @@ jobs:
         run: |
           echo "// ==UserScript==
           // @name         Mastodon Bird UI
-          // @match        https://ieji.de/*
-          // @grant        GM_addStyle
-          // @version      ${{ env.TAG_NAME }}
-          // @author       egecelikci
           // @description  A UserScript that applies the Mastodon Bird UI style to ieji.de
+          // @version      ${{ env.TAG_NAME }}
+          // @match        https://ieji.de/*
+          // @grant        GM.addStyle
           // @downloadURL  https://github.com/egecelikci/mastodon-bird-ui-userscript/releases/latest/download/mastodon-bird-ui.user.js
           // @updateURL    https://github.com/egecelikci/mastodon-bird-ui-userscript/releases/latest/download/mastodon-bird-ui.user.js
           // ==/UserScript==
           " > mastodon-bird-ui.user.js
-          echo "GM_addStyle(\`" >> mastodon-bird-ui.user.js
-          cat style.css >> mastodon-bird-ui.user.js
+          echo "GM.addStyle(\`" >> mastodon-bird-ui.user.js
+          cat layout-single-column.css >> mastodon-bird-ui.user.js
+          echo "\`);" >> mastodon-bird-ui.user.js
+echo "GM.addStyle(\`" >> mastodon-bird-ui.user.js
+          cat layout-multiple-columns.css >> mastodon-bird-ui.user.js
           echo "\`);" >> mastodon-bird-ui.user.js
 
       - name: Release scripts
