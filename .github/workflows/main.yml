@@ -14,11 +14,11 @@ jobs:
 
       - name: Get layout-single-column.css
         run: |
-          curl https://github.com/ronilaukkarinen/mastodon-bird-ui/raw/main/layout-single-column.css > layout-single-column.css
+          curl https://raw.githubusercontent.com/ronilaukkarinen/mastodon-bird-ui/main/layout-single-column.css > layout-single-column.css
 
       - name: Get layout-multiple-columns.css
         run: |
-          curl https://github.com/ronilaukkarinen/mastodon-bird-ui/raw/main/layout-multiple-columns.css > layout-multiple-columns.css
+          curl https://raw.githubusercontent.com/ronilaukkarinen/mastodon-bird-ui/main/layout-multiple-columns.css > layout-multiple-columns.css
 
       - name: Generate tag name
         run: echo "TAG_NAME=$(date +%F-%H-%M)" >> $GITHUB_ENV
