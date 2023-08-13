@@ -38,7 +38,7 @@ jobs:
           echo "GM.addStyle(\`" >> mastodon-bird-ui.user.js
           cat layout-single-column.css >> mastodon-bird-ui.user.js
           echo "\`);" >> mastodon-bird-ui.user.js
-echo "GM.addStyle(\`" >> mastodon-bird-ui.user.js
+          echo "GM.addStyle(\`" >> mastodon-bird-ui.user.js
           cat layout-multiple-columns.css >> mastodon-bird-ui.user.js
           echo "\`);" >> mastodon-bird-ui.user.js
 
